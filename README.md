@@ -1,4 +1,7 @@
-JAntScan - Java Annotation Scan is an application that scans a jar file and reports all annotations that it could discover in the file.
+---------
+JAntScan 
+---------
+Java Annotation Scan is an application that scans a jar file and reports all annotations that it could discover in the file.
 
 Currently it only supports run-time annotations that the application can discover by instantiating a class instance of the class in the jar.
 The annotation added on the class should be included as a class file inside the jar.
@@ -60,4 +63,42 @@ mvn test
 ```
 
 Unit test code coverage can be found at ```./target/site/jacoco/index.html```
+
+Additionally, ```src/test/resources``` also contains the assembly jar of this workspace that can be supplied as an argument for scanning
+
+You can scan by running either of these commands
+
+```
+java -jar ./target/jantscan-jar-with-dependencies.jar ./src/test/resources/jantscan-jar-with-dependencies.jar
+```
+
+or
+
+```
+java -jar ./target/jantscan-jar-with-dependencies.jar ./target/jantscan-jar-with-dependencies.jar
+```
+
+The scan would output the following as part of the greater report/
+
+```
+Scanned: ca.jantscan.constants.IOExceptionCheckedBiFunction
+--Class Annotation--
+ca.jantscan.constants.IOExceptionCheckedBiFunction:[java.lang.FunctionalInterface,]
+--Field--
+None
+--Constructor--
+method-level annotated constructors, found none
+only-method-parameter annotated constructors, found none
+--Methods--
+method-level annotated methods, found none
+only-method-parameter annotated methods, found none
+```
+
+The scan detects that IOExceptionCheckedBiFunction has a class level ```java.lang.FunctionalInterface``` annotation
+
+https://github.com/dhruvbiswas/jantscan/blob/master/src/main/java/ca/jantscan/constants/IOExceptionCheckedBiFunction.java
+
+Similarly the output would also detects class level ```java.lang.FunctionalInterface``` annotation in
+
+https://github.com/dhruvbiswas/jantscan/blob/master/src/main/java/ca/jantscan/constants/IOExceptionCheckedFunction.java
 
