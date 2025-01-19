@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FunctionsTest {
 
@@ -46,5 +48,21 @@ public class FunctionsTest {
         Assert.assertTrue(Functions.intToString.apply(10).equals("10"));
         Assert.assertTrue(Functions.intToString.apply(0).equals("0"));
         Assert.assertNull(Functions.intToString.apply(null));
+    }
+
+    @Test
+    public void testMatch() {
+        System.out.println("Test: " + Functions.doesPackageMatchString.apply(
+                "org.springframework.web.servlet.function.AbstractServerResponse", "org.springframework"));
+    }
+
+    @Test
+    public void testMatch2() {
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("org.springframework", true);
+        map.put("org.aspectj", true);
+        Assert.assertTrue(Functions.doesPackageMatch.apply("org.springframework.web.servlet.function.AbstractServerResponse", map));
+        Assert.assertTrue(Functions.doesPackageMatch.apply("org.aspectj.some.true", map));
+        Assert.assertFalse(Functions.doesPackageMatch.apply("org.nomatch.some.true", map));
     }
 }

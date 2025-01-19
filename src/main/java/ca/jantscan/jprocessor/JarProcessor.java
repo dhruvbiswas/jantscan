@@ -8,7 +8,9 @@ import ca.jantscan.exception.JarProcessorException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JarProcessor implements IJProcessor {
     private final String jarPath;
@@ -44,18 +46,19 @@ public class JarProcessor implements IJProcessor {
 
             for (String className : this.jarManagerClassLoader.getClassNames()) {
                 try {
-                    System.out.println("Running class.forName on " + className);
+                    // System.out.println("Running class.forName on: " + className);
+
                     Class clazz = Class.forName(className,
                             true,
                             this.jarManagerClassLoader.getJarManagerClassLoader());
 
-                    System.out.println("Discovering annotations for class: " + clazz.getName());
                     this.discoveredAnnotationsList.add(classAnnotationProcessor.process(clazz));
+                } catch (ClassNotFoundException e) {
+                    System.out.println("WARN: class not found " + className + " ....SKIPPING");
                 } catch (Exception e) {
-                    throw new JarProcessorException(e.getMessage(), e);
+                    System.out.println(e.getMessage() + className + " ....SKIPPING");
                 }
             }
-
         } else {
             throw new JarProcessorException("No classes to scan");
         }

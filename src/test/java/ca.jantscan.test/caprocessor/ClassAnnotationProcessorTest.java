@@ -24,7 +24,7 @@ public class ClassAnnotationProcessorTest {
             String actualAnnotation = discoveredAnnotations.getClassLevelAnnotationsList().get(0).annotationType().getName();
             Assert.assertTrue(actualAnnotation.equals(expectedAnnotation));
 
-            System.out.println(discoveredAnnotations.toString());
+            // System.out.println(discoveredAnnotations.toString());
 
         } catch (ClassNotFoundException e) {
             Assert.assertTrue(false);
@@ -69,7 +69,7 @@ public class ClassAnnotationProcessorTest {
             Assert.assertTrue(discoveredAnnotations.getClassConstructorAnnotationsMap() != null
                     && discoveredAnnotations.getClassConstructorAnnotationsMap().entrySet().size() == 3);
 
-            System.out.println(discoveredAnnotations.toString());
+            // System.out.println(discoveredAnnotations.toString());
         } catch (ClassNotFoundException e) {
             Assert.assertTrue(false);
         }
@@ -92,7 +92,114 @@ public class ClassAnnotationProcessorTest {
             String actualAnnotation = discoveredAnnotations.getClassLevelAnnotationsList().get(0).annotationType().getName();
             Assert.assertTrue(actualAnnotation.equals(expectedAnnotation));
 
-            System.out.println(discoveredAnnotations.toString());
+            // System.out.println(discoveredAnnotations.toString());
+        } catch (ClassNotFoundException e) {
+            Assert.assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testSpringConfiguration() {
+        try {
+            Class clazz = Class.forName("ca.jantscan.test.beans.SpringConfiguration");
+
+            ClassAnnotationProcessor classAnnotationProcessor = new ClassAnnotationProcessor();
+
+            DiscoveredAnnotations discoveredAnnotations = classAnnotationProcessor.process(clazz);
+
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList() != null);
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList().size() == 1);
+
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList().get(0) != null);
+            String expectedAnnotation = "ca.jantscan.test.annotations.Configuration";
+            String actualAnnotation = discoveredAnnotations.getClassLevelAnnotationsList().get(0).annotationType().getName();
+            Assert.assertTrue(actualAnnotation.equals(expectedAnnotation));
+
+            Assert.assertTrue(discoveredAnnotations.getClassAttributeAnnotationMap() != null
+                    && discoveredAnnotations.getClassAttributeAnnotationMap().size() == 0);
+
+            Assert.assertTrue(discoveredAnnotations.getClassConstructorAnnotationsMap() != null
+                    && discoveredAnnotations.getClassConstructorAnnotationsMap().size() == 0);
+
+            Assert.assertTrue(discoveredAnnotations.getClassConstructorParamAnnotationMap() != null
+                    && discoveredAnnotations.getClassConstructorParamAnnotationMap().size() == 0);
+
+            Assert.assertTrue(discoveredAnnotations.getClassMethodParameterAnnotationMap() != null
+                    && discoveredAnnotations.getClassMethodParameterAnnotationMap().size() == 0);
+
+            // System.out.println(discoveredAnnotations.toString());
+        } catch (ClassNotFoundException e) {
+            Assert.assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testSpringService() {
+        try {
+            Class clazz = Class.forName("ca.jantscan.test.beans.SpringService");
+
+            ClassAnnotationProcessor classAnnotationProcessor = new ClassAnnotationProcessor();
+
+            DiscoveredAnnotations discoveredAnnotations = classAnnotationProcessor.process(clazz);
+
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList() != null);
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList().size() == 1);
+
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList().get(0) != null);
+            String expectedAnnotation = "ca.jantscan.test.annotations.Service";
+            String actualAnnotation = discoveredAnnotations.getClassLevelAnnotationsList().get(0).annotationType().getName();
+            Assert.assertTrue(actualAnnotation.equals(expectedAnnotation));
+
+            Assert.assertTrue(discoveredAnnotations.getClassAttributeAnnotationMap() != null
+                    && discoveredAnnotations.getClassAttributeAnnotationMap().size() == 0);
+
+            Assert.assertTrue(discoveredAnnotations.getClassConstructorAnnotationsMap() != null
+                    && discoveredAnnotations.getClassConstructorAnnotationsMap().size() == 0);
+
+            System.out.println("Size: " + discoveredAnnotations.getClassConstructorParamAnnotationMap().size());
+            Assert.assertTrue(discoveredAnnotations.getClassConstructorParamAnnotationMap() != null
+                    && discoveredAnnotations.getClassConstructorParamAnnotationMap().size() == 1);
+
+            Assert.assertTrue(discoveredAnnotations.getClassMethodParameterAnnotationMap() != null
+                    && discoveredAnnotations.getClassMethodParameterAnnotationMap().size() == 0);
+
+            // System.out.println(discoveredAnnotations.toString());
+        } catch (ClassNotFoundException e) {
+            Assert.assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testSpringValueConstructor() {
+        try {
+            Class clazz = Class.forName("ca.jantscan.test.beans.SpringValueConstructor");
+
+            ClassAnnotationProcessor classAnnotationProcessor = new ClassAnnotationProcessor();
+
+            DiscoveredAnnotations discoveredAnnotations = classAnnotationProcessor.process(clazz);
+
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList() != null);
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList().size() == 1);
+
+            Assert.assertTrue(discoveredAnnotations.getClassLevelAnnotationsList().get(0) != null);
+            String expectedAnnotation = "ca.jantscan.test.annotations.Component";
+            String actualAnnotation = discoveredAnnotations.getClassLevelAnnotationsList().get(0).annotationType().getName();
+            Assert.assertTrue(actualAnnotation.equals(expectedAnnotation));
+
+            Assert.assertTrue(discoveredAnnotations.getClassAttributeAnnotationMap() != null
+                    && discoveredAnnotations.getClassAttributeAnnotationMap().size() == 0);
+
+            Assert.assertTrue(discoveredAnnotations.getClassConstructorAnnotationsMap() != null
+                    && discoveredAnnotations.getClassConstructorAnnotationsMap().size() == 0);
+
+            System.out.println("Size: " + discoveredAnnotations.getClassConstructorParamAnnotationMap().size());
+            Assert.assertTrue(discoveredAnnotations.getClassConstructorParamAnnotationMap() != null
+                    && discoveredAnnotations.getClassConstructorParamAnnotationMap().size() == 1);
+
+            Assert.assertTrue(discoveredAnnotations.getClassMethodParameterAnnotationMap() != null
+                    && discoveredAnnotations.getClassMethodParameterAnnotationMap().size() == 0);
+
+            // System.out.println(discoveredAnnotations.toString());
         } catch (ClassNotFoundException e) {
             Assert.assertTrue(false);
         }

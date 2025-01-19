@@ -22,7 +22,7 @@ public class JarManager {
     public void process() throws JarManagerException {
         try {
             this.jarProcessor.process();
-        } catch (JarProcessorException e) {
+        } catch (Exception e) {
             throw new JarManagerException(e.getMessage(), e);
         }
     }

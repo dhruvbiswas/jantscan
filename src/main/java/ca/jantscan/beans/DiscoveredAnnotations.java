@@ -53,6 +53,9 @@ public class DiscoveredAnnotations {
         return classLevelAnnotationsList;
     }
 
+    public void setClassLevelAnnotationsList(List<Annotation> classLevelAnnotationsList) {
+        this.classLevelAnnotationsList = classLevelAnnotationsList;
+    }
 
     public Map<String, List<Annotation>> getClassAttributeAnnotationMap() {
         return classAttributeAnnotationMap;
@@ -143,7 +146,7 @@ public class DiscoveredAnnotations {
             });
 
         } else {
-            builder.append("No method-level annotated constructors" + System.lineSeparator());
+            builder.append("method-level annotated constructors, found none" + System.lineSeparator());
         }
 
         // Check if we have constructors that have constructor param level annotation only
@@ -160,7 +163,7 @@ public class DiscoveredAnnotations {
                 }
             });
         } else {
-            builder.append("No only-method-parameter annotated constructors" + System.lineSeparator());
+            builder.append("only-method-parameter annotated constructors, found none" + System.lineSeparator());
         }
 
         Map<String, Boolean> visitedMethods = new HashMap<>();
@@ -195,7 +198,7 @@ public class DiscoveredAnnotations {
             });
 
         } else {
-            builder.append("No method-level annotated methods" + System.lineSeparator());
+            builder.append("method-level annotated methods, found none" + System.lineSeparator());
         }
 
         // Check if we have methods that have method param level annotation only
@@ -212,7 +215,7 @@ public class DiscoveredAnnotations {
                 }
             });
         } else {
-            builder.append("No only-method-parameter annotated methods" + System.lineSeparator());
+            builder.append("only-method-parameter annotated methods, found none" + System.lineSeparator());
         }
 
         builder.append("------------------------------------------" + System.lineSeparator());

@@ -16,6 +16,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 public class Functions {
 
@@ -31,6 +32,8 @@ public class Functions {
             jarManagerClassLoader = new JarManagerClassLoader(
                     new URLClassLoader(jarProcessorBean.getClassUrls().toArray(new URL[0])),
                     jarProcessorBean.getClassNames());
+
+            // System.out.println("Finished processing jarfile....");
         } else {
             throw new FileNotFoundException("File " + path + " does not exist");
         }
@@ -47,25 +50,52 @@ public class Functions {
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
 
-                String name = entry.getName();
-                System.out.println("jarentry: " + name);
-
-                // Handle nested JARs
-                if (name.endsWith(".jar")) {
-                    // extract nested jar into temp file
-                    File tempJar = extractNestedJarToTempFile.apply(jar, entry);
-
-                    // Depth first and process nested jar
-                    jarProcessorBean.setJarFile(tempJar);
-                    processJar(jarProcessorBean);
-                }
-
-                // Found a class file
-                if (name.endsWith(".class")) {
-                    String className = name.replace("/", ".").replace(".class", "");
-                    jarProcessorBean.getClassNames().add(className);
+                if (entry.isDirectory()) {
+                    processJarEntryDirectory(jar, entry, jarProcessorBean);
+                } else {
+                    processEntry(jar, entry, jarProcessorBean);
                 }
             }
+        }
+    }
+
+    public static void processJarEntryDirectory(JarFile jarFile, JarEntry entry, JarProcessorBean jarProcessorBean) throws IOException {
+        JarInputStream jis = new JarInputStream(jarFile.getInputStream(entry));
+        JarEntry je;
+
+        try {
+            while ((je = jis.getNextJarEntry()) != null) {
+                if (je.isDirectory()) {
+                    processJarEntryDirectory(jarFile, je, jarProcessorBean);
+                } else {
+                    processEntry(jarFile, je, jarProcessorBean);
+                }
+            }
+        } finally {
+            jis.close();
+        }
+    }
+
+    public static void processEntry(JarFile jarFile, JarEntry entry, JarProcessorBean jarProcessorBean) throws IOException {
+        String name = entry.getName();
+        // System.out.println("jarentry: " + name);
+
+        // Handle nested JARs
+        if (name.endsWith(".jar")) {
+            // System.out.println("Found a nested jar... extracting");
+            // extract nested jar into temp file
+            File tempJar = extractNestedJarToTempFile.apply(jarFile, entry);
+
+            // Depth first and process nested jar
+            jarProcessorBean.setJarFile(tempJar);
+            processJar(jarProcessorBean);
+        } else if (name.endsWith(".class")) {
+            String className = name.replace("/", ".").replaceAll(".class$", "");
+
+            //String cName = className.replaceAll("BOOT-INF.classes.", "");
+
+            // System.out.println("Found a classfile " + className);
+            jarProcessorBean.getClassNames().add(className);
         }
     }
 
@@ -129,6 +159,27 @@ public class Functions {
         }
 
         return builder.toString();
+    };
+
+    public static BiFunction<String, Map<String, Boolean>, Boolean> doesPackageMatch = (mtch, map) -> {
+        Boolean ret = false;
+
+        for (Map.Entry<String, Boolean> entry : map.entrySet()) {
+            if (Functions.doesPackageMatchString.apply(mtch, entry.getKey())) {
+                ret = true;
+                break;
+            }
+        }
+
+        return ret;
+    };
+
+    public static BiFunction<String, String, Boolean> doesPackageMatchString = (mtch, fqp) -> {
+        if (mtch.contains(fqp)) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
 }

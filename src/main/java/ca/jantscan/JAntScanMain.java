@@ -2,7 +2,6 @@ package ca.jantscan;
 
 import ca.jantscan.enums.ExitCodeEnum;
 import ca.jantscan.jmanager.JarManager;
-import ca.jantscan.exception.JarManagerException;
 
 public class JAntScanMain {
 
