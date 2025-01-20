@@ -44,14 +44,17 @@ public class JarProcessor implements IJProcessor {
 
             ClassAnnotationProcessor classAnnotationProcessor =  new ClassAnnotationProcessor();
 
+            //Iterate over discovered classes
             for (String className : this.jarManagerClassLoader.getClassNames()) {
                 try {
                     // System.out.println("Running class.forName on: " + className);
 
+                    // Instantiate a Class instance
                     Class clazz = Class.forName(className,
                             true,
                             this.jarManagerClassLoader.getJarManagerClassLoader());
 
+                    // Process all discoverable annotations in the class
                     this.discoveredAnnotationsList.add(classAnnotationProcessor.process(clazz));
                 } catch (ClassNotFoundException e) {
                     System.out.println("WARN: class not found " + className + " ....SKIPPING");

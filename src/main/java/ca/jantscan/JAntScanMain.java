@@ -12,8 +12,13 @@ public class JAntScanMain {
         try {
             JarManager jarManager = new JarManager(jarFilePath);
 
+            // Initialize jarManager
             jarManager.init();
+
+            // Process jarManager
             jarManager.process();
+
+            // Generate report
             jarManager.report();
 
             exitCodeEnum = ExitCodeEnum.SUCCESS;
@@ -30,9 +35,11 @@ public class JAntScanMain {
 
         if (args.length == 1) {
             String jarFilePath = args[0];
+
             JAntScanMain.exitCode = JAntScanMain.run(jarFilePath);
         } else {
             System.out.println("Usage: java JAntScanMain <absolute-path-to-jarfile>");
+
             JAntScanMain.exitCode = ExitCodeEnum.SUCCESS;
         }
 

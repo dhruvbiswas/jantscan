@@ -24,9 +24,11 @@ public class Functions {
         JarManagerClassLoader jarManagerClassLoader = null;
         File file = new File(path);
 
+        // Check if file exists
         if (file.exists() && file.canRead()) {
             JarProcessorBean jarProcessorBean = new JarProcessorBean(file, new ArrayList<>(), new HashSet<>());
 
+            // process jar file
             Functions.processJar(jarProcessorBean);
 
             jarManagerClassLoader = new JarManagerClassLoader(
@@ -45,14 +47,19 @@ public class Functions {
         jarProcessorBean.getClassUrls().add(jarProcessorBean.getJarFile().toURI().toURL());
 
         try (JarFile jar = new JarFile(jarProcessorBean.getJarFile())) {
+            // fetch all jar entries
             Enumeration<JarEntry> entries = jar.entries();
 
+            // Iterate over jar entries
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
 
+                // Check if entry is a folder
                 if (entry.isDirectory()) {
+                    // depth first into folder
                     processJarEntryDirectory(jar, entry, jarProcessorBean);
                 } else {
+                    // else process as a non folder
                     processEntry(jar, entry, jarProcessorBean);
                 }
             }
@@ -61,13 +68,18 @@ public class Functions {
 
     public static void processJarEntryDirectory(JarFile jarFile, JarEntry entry, JarProcessorBean jarProcessorBean) throws IOException {
         JarInputStream jis = new JarInputStream(jarFile.getInputStream(entry));
+
         JarEntry je;
 
         try {
+            // iterate over all entries in the folder
             while ((je = jis.getNextJarEntry()) != null) {
+                // check if the entry is a folder
                 if (je.isDirectory()) {
+                    // depth first into the folder
                     processJarEntryDirectory(jarFile, je, jarProcessorBean);
                 } else {
+                    // else process as a non-folder
                     processEntry(jarFile, je, jarProcessorBean);
                 }
             }
@@ -83,6 +95,7 @@ public class Functions {
         // Handle nested JARs
         if (name.endsWith(".jar")) {
             // System.out.println("Found a nested jar... extracting");
+
             // extract nested jar into temp file
             File tempJar = extractNestedJarToTempFile.apply(jarFile, entry);
 
@@ -90,6 +103,7 @@ public class Functions {
             jarProcessorBean.setJarFile(tempJar);
             processJar(jarProcessorBean);
         } else if (name.endsWith(".class")) {
+            // We have found a class entry
             String className = name.replace("/", ".").replaceAll(".class$", "");
 
             //String cName = className.replaceAll("BOOT-INF.classes.", "");
