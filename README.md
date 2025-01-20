@@ -4,11 +4,15 @@ JAntScan
 Java Annotation Scan is an application that scans a jar file and reports all annotations that it could discover in the file.
 
 Currently it only supports run-time annotations that the application can discover by instantiating a class instance of the class in the jar.
-The annotation added on the class should be included as a class file inside the jar.
+The annotations added on or in the class should be included and bundled as class files inside the jar.
 
-There is a sample jar-with-all-dependencies that contains annotated classes at the following location that can be used to test the report generated
+The application successfully scans fat jars built with assembly and shade plugins.
+
+There are sample jar-with-all-dependencies that contain annotated classes at the following location that can be used to test the report generated
 
 https://github.com/dhruvbiswas/jantscan/blob/master/src/test/resources/sample_application-1.0-SNAPSHOT-jar-with-dependencies.jar
+https://github.com/dhruvbiswas/jantscan/blob/master/src/test/resources/jantscan-jar-with-dependencies.jar
+https://github.com/dhruvbiswas/jantscan/blob/master/src/test/resources/dateutils.jar
 
 The workspace can be built using the following command
 
