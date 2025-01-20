@@ -45,7 +45,10 @@ hashCode_0:[jdk.internal.HotSpotIntrinsicCandidate,]
 only-method-parameter annotated methods, found none
 ```
 
-The application currently does not support executable jar file parsing. 
+The application currently does not support executable jar file parsing. That is to say the application does not support parsing the following
+
+https://docs.spring.io/spring-boot/docs/3.2.7-SNAPSHOT/reference/html/executable-jar.html
+
 The application uses ```class.forName``` and passes in the
 jar file that the user specifies as a classloader URL. If ```class.forName``` cannot instantiate a Class instance from the jar the 
 application would exit with an Error.
